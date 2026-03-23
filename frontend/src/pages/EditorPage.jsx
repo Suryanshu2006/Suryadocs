@@ -6,6 +6,7 @@ import { io } from 'socket.io-client';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Collaboration from '@tiptap/extension-collaboration';
+import { API_URL } from '../config';
 
 export default function EditorPage() {
   const { id } = useParams();
@@ -20,9 +21,9 @@ export default function EditorPage() {
 
   // Initialize socket and fetch initial document binary content
   useEffect(() => {
-    socketRef.current = io('http://localhost:5001');
+    socketRef.current = io(API_URL);
     
-    fetch(`http://localhost:5001/api/documents/${id}`, {
+    fetch(`${API_URL}/api/documents/${id}`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(res => res.json())
@@ -67,7 +68,7 @@ export default function EditorPage() {
     setIsSaving(true);
     const content = Y.encodeStateAsUpdate(ydocRef.current);
     try {
-      await fetch(`http://localhost:5001/api/documents/${id}/save`, {
+      await fetch(`${API_URL}/api/documents/${id}/save`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',

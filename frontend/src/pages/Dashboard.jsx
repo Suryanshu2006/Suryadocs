@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 export default function Dashboard() {
   const [documents, setDocuments] = useState([]);
@@ -13,7 +14,7 @@ export default function Dashboard() {
 
   const fetchDocs = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/documents', {
+      const res = await fetch(`${API_URL}/api/documents`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
@@ -27,7 +28,7 @@ export default function Dashboard() {
     e.stopPropagation();
     if (!window.confirm('Are you sure you want to delete this document?')) return;
     try {
-      const res = await fetch(`http://localhost:5001/api/documents/${id}`, {
+      const res = await fetch(`${API_URL}/api/documents/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
